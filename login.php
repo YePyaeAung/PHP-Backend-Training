@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require 'config.php';
 
 if(!empty($_POST)) {
@@ -16,8 +18,8 @@ if(!empty($_POST)) {
     } else {
         $verifiedPass = password_verify($password, $user['password']);
         if($verifiedPass) {
-            // $_SESSION['user_id'] = $user['id'];
-            // $_SESSION['logged_in'] = time();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['logged_in'] = time();
 
             header('Location: index.php');
             exit;

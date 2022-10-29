@@ -43,7 +43,7 @@ $post = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post Page</title>
+    <title>Edit Post Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
@@ -53,7 +53,7 @@ $post = $stmt->fetch(PDO::FETCH_ASSOC);
                 <form action="edit.php?id=<?= $post['id']; ?>" method="post">
                     <div class="card my-5">
                         <div class="card-header bg-primary">
-                            <h1 class="text-center text-white">Create Post Form</h1>
+                            <h1 class="text-center text-white">Edit Post Form</h1>
                         </div>
                         <div class="card-body">
                             <div class="form-group mb-3">

@@ -44,6 +44,7 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Created_at</th>
+                                <th>Actions</th>
                             </tr>
                             <?php 
                             if($posts) {
@@ -53,6 +54,10 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
                                 <td><?= $post['title'] ?></td>
                                 <td><?= $post['description'] ?></td>
                                 <td><?= date('d/m/Y', strtotime($post['created_at'])) ?></td>
+                                <td>
+                                    <a href="edit.php?id=<?= $post['id'] ?>" class="btn btn-warning">Edit</a>
+                                    <a href="delete.php?id=<?= $post['id'] ?>" class="btn btn-danger">Delete</a>
+                                </td>
                             </tr>
                             <?php
                                 }

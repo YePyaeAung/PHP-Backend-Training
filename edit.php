@@ -13,11 +13,26 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
         $title = $_POST['title'];
         $description = $_POST['description'];
         $id = $_GET['id'];
-    
-        $sql = "UPDATE posts SET title = '$title', description = '$description' WHERE id=$id";
-        $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute();
-    
+
+        if($_FILES['image']['name']) {
+            $targetFile = 'images/'.($_FILES['image']['name']);
+            $imageName = $_FILES['image']['name'];
+            $imageType = pathinfo($targetFile, PATHINFO_EXTENSION);
+
+            if($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg') {
+                echo "<script>alert('Image type must be png, jpg, or jpeg');</script>";
+            } else {
+                move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
+
+                $sql = "UPDATE posts SET title = '$title', description = '$description', image = '$imageName' WHERE id=$id";
+                $stmt = $pdo->prepare($sql);
+                $result = $stmt->execute();
+            }
+        } else {
+            $sql = "UPDATE posts SET title = '$title', description = '$description' WHERE id=$id";
+            $stmt = $pdo->prepare($sql);
+            $result = $stmt->execute();
+        }
         if($result) {
             echo "<script>
                 alert('Post Updated Successfully!!!');
@@ -50,7 +65,7 @@ $post = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-2">
-                <form action="edit.php?id=<?= $post['id']; ?>" method="post">
+                <form action="edit.php?id=<?= $post['id']; ?>" method="post" enctype="multipart/form-data">
                     <div class="card my-5">
                         <div class="card-header bg-primary">
                             <h1 class="text-center text-white">Edit Post Form</h1>
@@ -65,6 +80,11 @@ $post = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <textarea name="description" id="description" class="form-control" cols="30" rows="5">
                                 <?= $post['description']; ?>
                                 </textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="image" class="form-label">Image</label><br>
+                                <img src="images/<?= $post['image'] ?>" alt="" width="150" class="img-thumbnail mb-3">
+                                <input type="file" name="image" id="image" class="form-control">
                             </div>
                             <div class="form-group mb-3">
                                 <input type="submit" value="Update" class="btn btn-primary">

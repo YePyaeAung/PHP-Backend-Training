@@ -43,6 +43,7 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
                             <tr>
                                 <th>Title</th>
                                 <th>Description</th>
+                                <th>Image</th>
                                 <th>Created_at</th>
                                 <th>Actions</th>
                             </tr>
@@ -53,6 +54,9 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
                             <tr>
                                 <td><?= $post['title'] ?></td>
                                 <td><?= $post['description'] ?></td>
+                                <td>
+                                    <img src="images/<?= $post['image'] ?>" alt="" width="150" class="img-thumbnail">
+                                </td>
                                 <td><?= date('d/m/Y', strtotime($post['created_at'])) ?></td>
                                 <td>
                                     <a href="edit.php?id=<?= $post['id'] ?>" class="btn btn-warning">Edit</a>

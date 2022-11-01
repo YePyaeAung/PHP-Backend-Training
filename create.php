@@ -14,17 +14,27 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
         $title = $_POST['title'];
         $description = $_POST['description'];
     
-        $sql = "INSERT INTO posts(title, description) VALUES (:title, :description)";
-        $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute([
-                ':title' => $title,
-                ':description' => $description,
-            ]);
-        if($result) {
-            echo "<script>
-                alert('Post Created Successfully!!!');
-                window.location.href='index.php';
-            </script>";
+        $targetFile = 'images/'.($_FILES['image']['name']);
+        $imageType = pathinfo($targetFile, PATHINFO_EXTENSION);
+
+        if($imageType != 'png' && $imageType != 'jpg' && $imageType != 'jpeg') {
+            echo "<script>alert('Image type must be png, jpg, or jpeg');</script>";
+        } else {
+            move_uploaded_file($_FILES['image']['tmp_name'], $targetFile);
+
+            $sql = "INSERT INTO posts(title, description, image) VALUES (:title, :description, :image)";
+            $stmt = $pdo->prepare($sql);
+            $result = $stmt->execute([
+                    ':title' => $title,
+                    ':description' => $description,
+                    ':image' => $_FILES['image']['name'],
+                ]);
+            if($result) {
+                echo "<script>
+                    alert('Post Created Successfully!!!');
+                    window.location.href='index.php';
+                </script>";
+            }
         }
     }
 }
@@ -45,7 +55,7 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-2">
-                <form action="create.php" method="post">
+                <form action="create.php" method="post" enctype="multipart/form-data">
                     <div class="card my-5">
                         <div class="card-header bg-primary">
                             <h1 class="text-center text-white">Create Post Form</h1>
@@ -58,6 +68,10 @@ if(empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
                             <div class="form-group mb-3">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea name="description" id="description" class="form-control" cols="30" rows="5"></textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="image" class="form-label">Image</label>
+                                <input type="file" name="image" id="image" class="form-control">
                             </div>
                             <div class="form-group mb-3">
                                 <input type="submit" value="Create" class="btn btn-primary">
